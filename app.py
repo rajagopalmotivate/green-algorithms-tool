@@ -184,7 +184,7 @@ def put_value_first(L, value):
         return [value] + L
         assert len(L)+1 == n
     else:
-        # print(f'{value} not in list') # DEBUGONLY
+        print(f'{value} not in list') # DEBUGONLY
         return L
 
 yesNo_options = [
@@ -415,7 +415,7 @@ external_stylesheets = [
          rel="stylesheet")
 ]
 
-# print(f'Dash version: {dcc.__version__}') # DEBUGONLY
+print(f'Dash version: {dcc.__version__}') # DEBUGONLY
 
 app = dash.Dash(
     __name__,
@@ -459,7 +459,7 @@ def validateInput(input_dict, data_dict, keysOfInterest):
 
     def validateKey(key, value):
         new_val = copy.copy(value)
-        # print('#b ', key, new_val, type(new_value))  # DEBUGONLY
+        print('#b ', key, new_val, type(new_value))  # DEBUGONLY
 
         if key in ['runTime_hour', 'numberCPUs', 'numberGPUs']:
             new_val = int(float(new_val))
@@ -539,13 +539,13 @@ def validateInput(input_dict, data_dict, keysOfInterest):
     wrong_imputs = dict()
     for key in keysOfInterest:
         new_value = unlist(input_dict[key])
-        # validateKey(key, new_value) # DEBUGONLY
+        validateKey(key, new_value) # DEBUGONLY
 
         try:
             new_dict[key] = validateKey(key, new_value)
 
         except:
-            # print(f'Wrong input for {key}: {new_value}') # DEBUGONLY
+            print(f'Wrong input for {key}: {new_value}') # DEBUGONLY
             wrong_imputs[key] = new_value
             # new_value = None
 
@@ -610,10 +610,10 @@ def fillInFromURL(url_search):
     '''
     :param url_search: Format is "?key=value&key=value&..."
     '''
-    # validateInput(default_values) # DEBUGONLY
-    # print("\n## Running fillInFromURL / triggered by: ", ctx.triggered_prop_ids) # DEBUGONLY
+    validateInput(default_values) # DEBUGONLY
+    print("\n## Running fillInFromURL / triggered by: ", ctx.triggered_prop_ids) # DEBUGONLY
 
-    # print("\n## URL callback 1 / triggered by: ", ctx.triggered_prop_ids)  # DEBUGONLY
+    print("\n## URL callback 1 / triggered by: ", ctx.triggered_prop_ids)  # DEBUGONLY
     # ctx_msg = json.dumps({
     #     'states': ctx.states,
     #     'triggered': ctx.triggered,
@@ -631,12 +631,12 @@ def fillInFromURL(url_search):
 
     if ctx.triggered_id is None:
         # NB This is needed because of this callback firing for no reason as documented by https://community.plotly.com/t/callback-fired-several-times-with-no-trigger-dcc-location/74525
-        # print("-> no-trigger callback prevented") # DEBUGONLY
+        print("-> no-trigger callback prevented") # DEBUGONLY
         raise PreventUpdate # TODO find a cleaner workaround
 
     elif (url_search is not None)&(url_search != ''):
 
-        # print("\n## picked from url") # DEBUGONLY
+        print("\n## picked from url") # DEBUGONLY
 
         show_popup = True
 
@@ -645,9 +645,9 @@ def fillInFromURL(url_search):
         # Load the right dataset to validate the URL inputs
         if 'appVersion' in url:
             new_version = unlist(url['appVersion'])
-            # print(f"Validating URL with {new_version} data") # DEBUGONLY
+            print(f"Validating URL with {new_version} data") # DEBUGONLY
         else:
-            # print(f"App version not provided in URL, using default ({default_values['appVersion']})") # DEBUGONLY
+            print(f"App version not provided in URL, using default ({default_values['appVersion']})") # DEBUGONLY
             new_version = default_values['appVersion']
         assert new_version in (appVersions_options_list + [current_version])
         if new_version == current_version:
@@ -669,7 +669,7 @@ def fillInFromURL(url_search):
                             f'using default values for '
             popup_message += f"{', '.join(list(invalidInputs.keys()))}."
 
-    # print(tuple(defaults2.values()) + (show_popup,popup_message)) # DEBUGONLY
+    print(tuple(defaults2.values()) + (show_popup,popup_message)) # DEBUGONLY
     return tuple(defaults2.values()) + (show_popup,popup_message)
 
 @app.callback(
@@ -778,7 +778,7 @@ def set_providers(selected_platform):
     '''
     Shows or hide the "providers" box, based on the platform selected
     '''
-    # print('\n## platformDropdown changed to: ', selected_platform) # DEBUGONLY
+    print('\n## platformDropdown changed to: ', selected_platform) # DEBUGONLY
 
     if selected_platform in ['cloudComputing']:
         # Only Cloud Computing need the providers box
@@ -1421,7 +1421,7 @@ def loadDataFromVersion(
         newVersion,
         # oldData
 ):
-    # print('-- version:', newVersion) # DEBUGONLY
+    print('-- version:', newVersion) # DEBUGONLY
 
     if newVersion is None:
         newVersion = current_version
@@ -1430,11 +1430,11 @@ def loadDataFromVersion(
 
     if newVersion == current_version:
         newData = load_data(os.path.join(data_dir, 'latest'), version = current_version)
-        # print('Loading latest data') # DEBUGONLY
+        print('Loading latest data') # DEBUGONLY
     else:
         newData = load_data(os.path.join(data_dir, newVersion), version=newVersion)
-        # print(f'Loading {newVersion} data') # DEBUGONLY
-    # print(f"CI FR: {newData.CI_dict_byLoc['FR']['carbonIntensity']}") # DEBUGONLY
+        print(f'Loading {newVersion} data') # DEBUGONLY
+    print(f"CI FR: {newData.CI_dict_byLoc['FR']['carbonIntensity']}") # DEBUGONLY
 
     return vars(newData) # to turn the SimpleNamespace into a dict that can be json serialized
 
@@ -1502,8 +1502,8 @@ def aggregate_input_values(data, coreType, n_CPUcores, CPUmodel, tdpCPUstyle, td
 
     output = dict()
 
-    # print('\n## data callback: runTime_hours=', runTime_hours) # DEBUGONLY
-    # print("triggered by: ", ctx.triggered_prop_ids) # DEBUGONLY
+    print('\n## data callback: runTime_hours=', runTime_hours) # DEBUGONLY
+    print("triggered by: ", ctx.triggered_prop_ids) # DEBUGONLY
 
     permalink = f'http://calculator.green-algorithms.org//'
     # permalink = 'http://127.0.0.1:8050/' # DEBUGONLY
